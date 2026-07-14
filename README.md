@@ -18,15 +18,17 @@ https://raw.githubusercontent.com/zwjtano/DualSubs-Universal-LLM/main/Plugins/Du
 2. 填写 API 地址，例如 `https://api.openai.com/v1/chat/completions`。
 3. 填写服务商支持的模型 ID。
 4. 填写 API Key。
+5. 保存后进入 Loon 的脚本页面，手动运行 `🧪 验证大模型`。
 
 API 地址可以是完整的 `/v1/chat/completions` 地址，也可以是以 `/v1` 结尾的基础地址。
 
-> 从 `1.7.5.2` 起，大模型参数改为 Loon 兼容的扁平字段。旧版用户请在 Loon 中更新插件；如果设置没有刷新，删除旧插件后重新添加上面的地址。
+> 从 `1.7.5.2` 起，大模型参数改为 Loon 兼容的扁平字段；`1.7.5.3` 增加模型验证。旧版用户请在 Loon 中更新插件；如果设置没有刷新，删除旧插件后重新添加上面的地址。
 
 ## 功能
 
 - 支持 OpenAI、OpenRouter、硅基流动、Ollama，以及其他 OpenAI 兼容接口
 - 可配置 API 地址、模型、API Key、温度、超时和附加请求头
+- 提供可手动运行的模型验证，区分连接、鉴权、模型、额度和响应格式问题
 - 按 40 条字幕分批翻译
 - 使用带编号的 JSON 输入输出校验，防止漏行和乱序
 - 保留 VTT、XML、JSON、YouTube/Spotify Protobuf 等上游处理链路
@@ -43,6 +45,8 @@ API 地址可以是完整的 `/v1/chat/completions` 地址，也可以是以 `/v
 
 如果字幕没有翻译，请先把插件日志等级设为 `INFO`，重新播放并选择“翻译字幕”。日志中应显示 `vendor: LLM`，但不会显示完整 API Key。
 
+也可以先在 Loon 的脚本页面运行 `🧪 验证大模型`：成功时会弹出“模型可用”；失败时会提示连接失败、鉴权失败、地址或模型不存在、请求受限，或接口响应格式不兼容。
+
 ## 更新上游版本
 
 构建工具会下载最新的 DualSubs Universal 插件及对应翻译脚本，再应用 LLM 补丁：
@@ -55,12 +59,14 @@ node tools/build-dualsubs-llm.mjs
 
 - `Plugins/DualSubs.Universal.LLM.plugin`
 - `Scripts/DualSubs/Translate.response.bundle.js`
+- `Scripts/DualSubs/ValidateModel.js`
 
 ## 验证
 
 ```bash
 node --check tools/build-dualsubs-llm.mjs
 node --check Scripts/DualSubs/Translate.response.bundle.js
+node --check Scripts/DualSubs/ValidateModel.js
 ```
 
 ## 致谢与许可

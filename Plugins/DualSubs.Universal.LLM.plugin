@@ -6,8 +6,8 @@
 #!icon = https://github.com/DualSubs/Universal/raw/main/src/assets/icon_rounded.png
 #!tag = 🍿️ DualSubs
 #!system = iOS,iPadOS,macOS,tvOS
-#!date = 2026-07-15 03:15:00
-#!version = 1.7.5.2
+#!date = 2026-07-15 04:00:00
+#!version = 1.7.5.3
 #!system_version = 15
 
 [Argument]
@@ -26,6 +26,8 @@ ShowOnly = switch,false,tag=[翻译器] 只显示翻译字幕,desc=是否仅显�
 LogLevel = select,"WARN","OFF","ERROR","INFO","DEBUG","ALL",tag=[调试] 日志等级,desc=选择脚本日志的输出等级，低于所选等级的日志将全部输出。
 
 [Script]
+generic script-path=https://raw.githubusercontent.com/zwjtano/DualSubs-Universal-LLM/main/Scripts/DualSubs/ValidateModel.js,tag=🧪 验证大模型,timeout=60,img-url=checkmark.seal.fill,argument=[{LLMEndpoint},{LLMModel},{LLMAuth},{LLMTimeout},{LLMHeaders}],enable=true
+
 http-response ^https?:\/\/(play|play-edge|hls)\.itunes\.apple\.com\/WebObjects\/(MZPlay|MZPlayLocal)\.woa\/hls\/playlist\.m3u8 requires-body=1, script-path=https://github.com/DualSubs/Universal/releases/download/v1.7.5/Manifest.response.bundle.js, tag=🍿️ DualSubs.TV.M3U8.Master.response, argument=[{Types},{Languages[0]},{Languages[1]},{Position},{Vendor},{ShowOnly},{LogLevel}]
 http-response ^https?:\/\/vod-(.+)-amt\.tv\.apple\.com\/itunes-assets\/(.+)\/([0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12})\/(.+)_subtitles(_V\d)?\.m3u8\?(.*)subtype= requires-body=1, script-path=https://github.com/DualSubs/Universal/releases/download/v1.7.5/Manifest.response.bundle.js, tag=🍿️ DualSubs.TV.M3U8.Subtitles.response, argument=[{Types},{Languages[0]},{Languages[1]},{Position},{Vendor},{ShowOnly},{LogLevel}]
 http-response ^https?:\/\/vod-(.+)-amt\.tv\.apple\.com\/itunes-assets\/(.+)\/([0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12})\/(.+)\.webvtt\?(.*)subtype=(Official|External) requires-body=1, script-path=https://github.com/DualSubs/Universal/releases/download/v1.7.5/Composite.Subtitles.response.bundle.js, tag=🍿️ DualSubs.TV.Composite.Subtitles.response, argument=[{Types},{Languages[0]},{Languages[1]},{Position},{Vendor},{ShowOnly},{LogLevel}]
