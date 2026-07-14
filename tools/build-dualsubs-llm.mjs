@@ -61,8 +61,15 @@ function patchBundle(source) {
 
   source = replaceOnce(
     source,
+    "r.logLevel=t.LogLevel;let o=",
+    'r.logLevel=t.LogLevel,t.LLM={...t.LLM,Endpoint:t.LLMEndpoint??t.LLM?.Endpoint,Model:t.LLMModel??t.LLM?.Model,Auth:t.LLMAuth??t.LLM?.Auth,Temperature:t.LLMTemperature??t.LLM?.Temperature,Timeout:t.LLMTimeout??t.LLM?.Timeout,Headers:t.LLMHeaders??t.LLM?.Headers};let o=',
+    "扁平 Loon 参数转为 LLM 配置",
+  );
+
+  source = replaceOnce(
+    source,
     'r.info(`typeof Settings: ${typeof n}`,`Settings: ${JSON.stringify(n,null,2)}`)',
-    'r.info(`typeof Settings: ${typeof n}`,`Settings: ${JSON.stringify({...n,LLM:n?.LLM?{...n.LLM,Auth:n.LLM.Auth?"***":""}:n?.LLM},null,2)}`)',
+    'r.info(`typeof Settings: ${typeof n}`,`Settings: ${JSON.stringify({...n,LLMAuth:n?.LLMAuth?"***":n?.LLMAuth,LLM:n?.LLM?{...n.LLM,Auth:n.LLM.Auth?"***":""}:n?.LLM},null,2)}`)',
     "日志中的 API Key 脱敏",
   );
 
@@ -72,6 +79,8 @@ function patchBundle(source) {
 function patchPlugin(source) {
   source = source
     .replace("#!name = 🍿️ DualSubs: 🔣 Universal", "#!name = 🍿️ DualSubs: 🔣 Universal LLM")
+    .replace(/^#!version\s*=\s*(.+)$/m, (_, version) => `#!version = ${version.trim()}.2`)
+    .replace(/^#!date\s*=.*$/m, "#!date = 2026-07-15 03:15:00")
     .replace(
       /#!desc = .*/,
       "#!desc = DualSubs Universal 的大模型翻译版\\n支持 OpenAI 兼容的 Chat Completions API",
@@ -82,12 +91,12 @@ function patchPlugin(source) {
     'Vendor = select,"Google","Microsoft",tag=[翻译器] 服务商API,desc=请选择翻译器所使用的服务商API，更多翻译选项请使用BoxJs。',
     [
       'Vendor = select,"LLM","Google","Microsoft",tag=[翻译器] 服务商API,desc=LLM 支持 OpenAI 兼容的 Chat Completions API。',
-      'LLM.Endpoint = input,"https://api.openai.com/v1/chat/completions",tag=[大模型] API 地址,desc=可填写完整 /v1/chat/completions 地址，也可填写以 /v1 结尾的基础地址。',
-      'LLM.Model = input,"gpt-4.1-mini",tag=[大模型] 模型名称,desc=填写服务商支持的模型 ID。',
-      'LLM.Auth = input,"",tag=[大模型] API Key,desc=仅保存在 Loon 插件配置中，请勿把填写密钥后的插件导出分享。',
-      'LLM.Temperature = input,"0.2",tag=[大模型] 温度,desc=字幕翻译建议使用 0 到 0.3。',
-      'LLM.Timeout = input,"120000",tag=[大模型] 超时毫秒,desc=默认 120 秒。',
-      'LLM.Headers = input,"",tag=[大模型] 附加请求头,desc=可选 JSON 对象，例如 {"HTTP-Referer":"https://example.com"}。',
+      'LLMEndpoint = input,"https://api.openai.com/v1/chat/completions",tag=[大模型] API 地址,desc=可填写完整 /v1/chat/completions 地址，也可填写以 /v1 结尾的基础地址。',
+      'LLMModel = input,"gpt-4.1-mini",tag=[大模型] 模型名称,desc=填写服务商支持的模型 ID。',
+      'LLMAuth = input,"",tag=[大模型] API Key,desc=仅保存在 Loon 插件配置中，请勿把填写密钥后的插件导出分享。',
+      'LLMTemperature = input,"0.2",tag=[大模型] 温度,desc=字幕翻译建议使用 0 到 0.3。',
+      'LLMTimeout = input,"120000",tag=[大模型] 超时毫秒,desc=默认 120 秒。',
+      'LLMHeaders = input,"",tag=[大模型] 附加请求头,desc=可选 JSON 对象，例如 {"HTTP-Referer":"https://example.com"}。',
     ].join("\n"),
     "插件 LLM 参数",
   );
@@ -95,7 +104,7 @@ function patchPlugin(source) {
   const oldArgs =
     "argument=[{Types},{Languages[0]},{Languages[1]},{Position},{Vendor},{ShowOnly},{LogLevel}]";
   const newArgs =
-    "argument=[{Types},{Languages[0]},{Languages[1]},{Position},{Vendor},{LLM.Endpoint},{LLM.Model},{LLM.Auth},{LLM.Temperature},{LLM.Timeout},{LLM.Headers},{ShowOnly},{LogLevel}]";
+    "argument=[{Types},{Languages[0]},{Languages[1]},{Position},{Vendor},{LLMEndpoint},{LLMModel},{LLMAuth},{LLMTemperature},{LLMTimeout},{LLMHeaders},{ShowOnly},{LogLevel}]";
 
   const translateScript =
     /https:\/\/github\.com\/DualSubs\/Universal\/releases\/download\/v[^/]+\/Translate\.response\.bundle\.js/g;

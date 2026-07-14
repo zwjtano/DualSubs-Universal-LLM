@@ -21,6 +21,8 @@ https://raw.githubusercontent.com/zwjtano/DualSubs-Universal-LLM/main/Plugins/Du
 
 API 地址可以是完整的 `/v1/chat/completions` 地址，也可以是以 `/v1` 结尾的基础地址。
 
+> 从 `1.7.5.2` 起，大模型参数改为 Loon 兼容的扁平字段。旧版用户请在 Loon 中更新插件；如果设置没有刷新，删除旧插件后重新添加上面的地址。
+
 ## 功能
 
 - 支持 OpenAI、OpenRouter、硅基流动、Ollama，以及其他 OpenAI 兼容接口
@@ -36,6 +38,10 @@ API 地址可以是完整的 `/v1/chat/completions` 地址，也可以是以 `/v
 - 不要提交或分享填写了 API Key 的插件导出文件。
 - 建议保持日志等级为默认的 `WARN`。
 - 使用第三方兼容接口时，请自行确认其数据处理和隐私政策。
+
+## 排错
+
+如果字幕没有翻译，请先把插件日志等级设为 `INFO`，重新播放并选择“翻译字幕”。日志中应显示 `vendor: LLM`，但不会显示完整 API Key。
 
 ## 更新上游版本
 
