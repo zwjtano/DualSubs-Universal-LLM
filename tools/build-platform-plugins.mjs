@@ -4,7 +4,7 @@ import { dirname, resolve } from "node:path";
 const root = resolve(import.meta.dirname, "..");
 const llmVersion = "1.7.5.7";
 const translateUrl = `https://raw.githubusercontent.com/zwjtano/DualSubs-Universal-LLM/main/Scripts/DualSubs/Translate.response.bundle.js?v=${llmVersion}`;
-const validateUrl = `https://raw.githubusercontent.com/zwjtano/DualSubs-Universal-LLM/main/Scripts/DualSubs/ValidateModel.js?v=${llmVersion}`;
+const validateUrl = "https://raw.githubusercontent.com/zwjtano/DualSubs-Universal-LLM/main/Scripts/DualSubs/ValidateModel.js";
 
 const platforms = [
   {
@@ -39,7 +39,7 @@ async function load(url, fallback) {
 function patchPlugin(source, platform) {
   const upstreamVersion = source.match(/^#!version\s*=\s*(.+)$/m)?.[1]?.trim();
   if (!upstreamVersion) throw new Error(`${platform}: missing upstream version`);
-  const version = `${upstreamVersion}.3`;
+  const version = `${upstreamVersion}.4`;
 
   source = source
     .replace(/^(#!name\s*=\s*.+)$/m, `$1 LLM v${version}`)
@@ -55,7 +55,7 @@ function patchPlugin(source, platform) {
         'LLMModel = input,"gpt-4.1-mini",tag=[大模型] 模型名称',
         'LLMAuth = input,"",tag=[大模型] API Key',
         'LLMTimeout = input,"120000",tag=[大模型] 超时毫秒',
-        'LLMHeaders = input,"{}",tag=[大模型] 附加请求头,desc=可选 JSON 对象',
+        'LLMHeaders = input,"",tag=[大模型] 附加请求头,desc=可选 JSON 对象',
       ].join("\n"),
     )
     .replace(

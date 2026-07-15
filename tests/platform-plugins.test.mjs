@@ -13,6 +13,11 @@ for (const platform of ["YouTube", "Netflix", "Spotify"]) {
   assert.match(source, /Vendor = select,"LLM","Google","Microsoft"/);
   assert.match(source, /LLMEndpoint = input/);
   assert.match(source, /🧪 验证大模型/);
+  assert.match(source, /LLMHeaders = input,"",/);
+  assert.match(
+    source,
+    /generic script-path=https:\/\/raw\.githubusercontent\.com\/zwjtano\/DualSubs-Universal-LLM\/main\/Scripts\/DualSubs\/ValidateModel\.js,tag=🧪 验证大模型/,
+  );
   assert.match(
     source,
     /DualSubs-Universal-LLM\/main\/Scripts\/DualSubs\/Translate\.response\.bundle\.js\?v=1\.7\.5\.7/,

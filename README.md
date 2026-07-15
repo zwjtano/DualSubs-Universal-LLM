@@ -19,9 +19,9 @@
 | 插件 | 用途 | 当前版本 | 安装 |
 | --- | --- | --- | --- |
 | 🔣 **Universal** | 为 Apple TV+、Disney+、Prime Video、Max 等 HLS 平台添加翻译字幕 | `1.7.5.7` | [在 Loon 中安装](https://raw.githubusercontent.com/zwjtano/DualSubs-Universal-LLM/main/Plugins/DualSubs.Universal.LLM.plugin) |
-| ▶️ **YouTube (Music)** | YouTube 双语字幕、YouTube Music 翻译歌词 | `1.5.11.3` | [在 Loon 中安装](https://raw.githubusercontent.com/zwjtano/DualSubs-Universal-LLM/main/Plugins/DualSubs.YouTube.LLM.plugin) |
-| 🇳 **Netflix** | Netflix 兼容模式双语翻译字幕 | `0.5.7.3` | [在 Loon 中安装](https://raw.githubusercontent.com/zwjtano/DualSubs-Universal-LLM/main/Plugins/DualSubs.Netflix.LLM.plugin) |
-| 🎵 **Spotify** | Spotify 歌词翻译与外部歌词补全 | `1.9.12.3` | [在 Loon 中安装](https://raw.githubusercontent.com/zwjtano/DualSubs-Universal-LLM/main/Plugins/DualSubs.Spotify.LLM.plugin) |
+| ▶️ **YouTube (Music)** | YouTube 双语字幕、YouTube Music 翻译歌词 | `1.5.11.4` | [在 Loon 中安装](https://raw.githubusercontent.com/zwjtano/DualSubs-Universal-LLM/main/Plugins/DualSubs.YouTube.LLM.plugin) |
+| 🇳 **Netflix** | Netflix 兼容模式双语翻译字幕 | `0.5.7.4` | [在 Loon 中安装](https://raw.githubusercontent.com/zwjtano/DualSubs-Universal-LLM/main/Plugins/DualSubs.Netflix.LLM.plugin) |
+| 🎵 **Spotify** | Spotify 歌词翻译与外部歌词补全 | `1.9.12.4` | [在 Loon 中安装](https://raw.githubusercontent.com/zwjtano/DualSubs-Universal-LLM/main/Plugins/DualSubs.Spotify.LLM.plugin) |
 
 > Universal 不包含 YouTube、Netflix 和 Spotify 的专用规则，请按实际使用的平台分别安装。
 
