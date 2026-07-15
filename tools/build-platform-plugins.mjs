@@ -39,7 +39,7 @@ async function load(url, fallback) {
 function patchPlugin(source, platform) {
   const upstreamVersion = source.match(/^#!version\s*=\s*(.+)$/m)?.[1]?.trim();
   if (!upstreamVersion) throw new Error(`${platform}: missing upstream version`);
-  const version = `${upstreamVersion}.2`;
+  const version = `${upstreamVersion}.3`;
 
   source = source
     .replace(/^(#!name\s*=\s*.+)$/m, `$1 LLM v${version}`)
@@ -67,8 +67,18 @@ function patchPlugin(source, platform) {
       `[Script]\ngeneric script-path=${validateUrl},tag=🧪 验证大模型,timeout=60,img-url=checkmark.seal.fill,argument=[{LLMEndpoint},{LLMModel},{LLMAuth},{LLMTimeout},{LLMHeaders}],enable=true\n\n`,
     );
 
+  if (platform === "YouTube") {
+    source = source.replace(
+      'Type = select,"Official","Translate",',
+      'Type = select,"Translate","Official",',
+    );
+  }
+
   if (!source.includes(translateUrl)) throw new Error(`${platform}: translate script was not replaced`);
   if (!source.includes("LLMEndpoint = input")) throw new Error(`${platform}: LLM settings were not added`);
+  if (platform === "YouTube" && !source.includes('Type = select,"Translate","Official",')) {
+    throw new Error("YouTube: Translate is not the default subtitle type");
+  }
   return source;
 }
 

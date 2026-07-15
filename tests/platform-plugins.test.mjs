@@ -17,6 +17,9 @@ for (const platform of ["YouTube", "Netflix", "Spotify"]) {
     source,
     /DualSubs-Universal-LLM\/main\/Scripts\/DualSubs\/Translate\.response\.bundle\.js\?v=1\.7\.5\.7/,
   );
+  if (platform === "YouTube") {
+    assert.match(source, /^Type = select,"Translate","Official",/m);
+  }
 }
 
 console.log("platform plugin tests passed");
