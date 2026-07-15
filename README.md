@@ -19,9 +19,6 @@
 | 插件 | 用途 | 当前版本 | 安装 |
 | --- | --- | --- | --- |
 | 🔣 **Universal** | 为 Apple TV+、Disney+、Prime Video、Max 等 HLS 平台添加翻译字幕 | `1.0.4` | [在 Loon 中安装](https://raw.githubusercontent.com/zwjtano/DualSubs-Universal-LLM/main/Plugins/DualSubs.Universal.LLM.plugin) |
-| 🇳 **Netflix** | Netflix 兼容模式双语翻译字幕 | `0.5.7.5` | [在 Loon 中安装](https://raw.githubusercontent.com/zwjtano/DualSubs-Universal-LLM/main/Plugins/DualSubs.Netflix.LLM.plugin) |
-
-> Universal 不包含 Netflix 的专用规则，如需使用 Netflix，请另外安装对应插件。
 
 ## 快速开始
 
@@ -109,12 +106,6 @@ DualSubs 识别平台与字幕格式
 node tools/build-dualsubs-llm.mjs
 ```
 
-重新生成 Netflix LLM 插件：
-
-```bash
-node tools/build-platform-plugins.mjs
-```
-
 运行全部测试：
 
 ```bash
@@ -132,6 +123,5 @@ node --test tests/*.test.mjs
 字幕解析、播放器适配和双语合成能力来自 [DualSubs](https://dualsubs.github.io/index.html) 及其开源仓库：
 
 - [DualSubs/Universal](https://github.com/DualSubs/Universal)
-- [DualSubs/Netflix](https://github.com/DualSubs/Netflix)
 
 本项目由 [zwjtano](https://github.com/zwjtano) 维护，并保留上游 Apache License 2.0 许可文件。
