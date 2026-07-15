@@ -1,82 +1,141 @@
-# DualSubs Universal LLM
+<div align="center">
 
-这是 [DualSubs Universal](https://github.com/DualSubs/Universal) 的大模型字幕翻译适配版，用于 Loon。
+<img src="https://github.com/DualSubs/Universal/raw/main/src/assets/icon_rounded.png" width="120" alt="DualSubs LLM">
 
-在保留原有字幕解析、平台识别和双语合成能力的基础上，新增 OpenAI 兼容的 Chat Completions 翻译接口。
+# DualSubs LLM
 
-## 安装
+### 大模型驱动的双语字幕与歌词
 
-在 Loon 中添加以下插件地址：
+基于 DualSubs 官方平台适配能力，为 Loon 增加 OpenAI 兼容的上下文字幕翻译。
+
+[快速开始](#快速开始) · [选择插件](#选择插件) · [支持的模型服务](#支持的模型服务) · [排错](#排错)
+
+</div>
+
+---
+
+## 选择插件
+
+| 插件 | 用途 | 当前版本 | 安装 |
+| --- | --- | --- | --- |
+| 🔣 **Universal** | 为 Apple TV+、Disney+、Prime Video、Max 等 HLS 平台添加翻译字幕 | `1.7.5.7` | [在 Loon 中安装](https://raw.githubusercontent.com/zwjtano/DualSubs-Universal-LLM/main/Plugins/DualSubs.Universal.LLM.plugin) |
+| ▶️ **YouTube (Music)** | YouTube 双语字幕、YouTube Music 翻译歌词 | `1.5.11.2` | [在 Loon 中安装](https://raw.githubusercontent.com/zwjtano/DualSubs-Universal-LLM/main/Plugins/DualSubs.YouTube.LLM.plugin) |
+| 🇳 **Netflix** | Netflix 兼容模式双语翻译字幕 | `0.5.7.2` | [在 Loon 中安装](https://raw.githubusercontent.com/zwjtano/DualSubs-Universal-LLM/main/Plugins/DualSubs.Netflix.LLM.plugin) |
+| 🎵 **Spotify** | Spotify 歌词翻译与外部歌词补全 | `1.9.12.2` | [在 Loon 中安装](https://raw.githubusercontent.com/zwjtano/DualSubs-Universal-LLM/main/Plugins/DualSubs.Spotify.LLM.plugin) |
+
+> Universal 不包含 YouTube、Netflix 和 Spotify 的专用规则，请按实际使用的平台分别安装。
+
+## 快速开始
+
+1. 点击上表中的安装链接，在 Loon 中添加插件。
+2. 打开插件设置，将“服务商 API”选择为 `LLM`。
+3. 填写 API 地址、模型 ID 和 API Key。
+4. 保存设置，进入 Loon 的脚本页面。
+5. 手动运行一次 `🧪 验证大模型`，看到“✅ 模型可用”。
+6. 回到播放器，选择新增的“翻译字幕”或翻译歌词选项。
+
+验证脚本会保存已验证的模型配置，供字幕响应脚本读取。更换 API 地址、模型或密钥后，需要重新运行一次验证。
+
+## 核心能力
+
+- **上下文翻译**：按批次把相邻字幕交给大模型，改善指代、语气和专有名词一致性。
+- **严格行序校验**：使用带编号的 JSON 输入输出，检查漏行、乱序和数量不一致。
+- **多格式支持**：保留上游 VTT、XML、JSON 以及 YouTube、Spotify Protobuf 处理链路。
+- **双语合成**：将原文和译文重新写回字幕或歌词响应，保持原播放器体验。
+- **模型验证**：区分连接、鉴权、模型、额度、限流和响应格式问题。
+- **配置保护**：日志对 API Key 脱敏；密钥仅传给用户配置的模型服务。
+
+## 支持的模型服务
+
+支持提供 OpenAI 兼容 Chat Completions API 的服务，例如：
+
+- OpenAI
+- OpenRouter
+- 硅基流动
+- Ollama
+- 其他兼容 `/v1/chat/completions` 的自建或第三方服务
+
+API 地址既可以填写完整接口：
 
 ```text
-https://raw.githubusercontent.com/zwjtano/DualSubs-Universal-LLM/main/Plugins/DualSubs.Universal.LLM.plugin
+https://example.com/v1/chat/completions
 ```
 
-其他平台的 LLM 版插件：
+也可以填写以 `/v1` 结尾的基础地址，插件会自动补全路径。
 
-- YouTube: `https://raw.githubusercontent.com/zwjtano/DualSubs-Universal-LLM/main/Plugins/DualSubs.YouTube.LLM.plugin`
-- Netflix: `https://raw.githubusercontent.com/zwjtano/DualSubs-Universal-LLM/main/Plugins/DualSubs.Netflix.LLM.plugin`
-- Spotify: `https://raw.githubusercontent.com/zwjtano/DualSubs-Universal-LLM/main/Plugins/DualSubs.Spotify.LLM.plugin`
+## 工作原理
 
-每个插件配置后都需手动运行一次“验证大模型”，以保存供翻译响应脚本使用的配置。
+```text
+播放器请求字幕
+    ↓
+DualSubs 识别平台与字幕格式
+    ↓
+提取并分批整理字幕文本
+    ↓
+调用用户配置的 LLM
+    ↓
+校验译文数量与顺序
+    ↓
+合并原文和译文并返回播放器
+```
 
-安装后打开插件设置：
+## 使用要求
 
-1. 将“服务商 API”选择为 `LLM`。
-2. 填写 API 地址，例如 `https://api.openai.com/v1/chat/completions`。
-3. 填写服务商支持的模型 ID。
-4. 填写 API Key。
-5. 保存后进入 Loon 的脚本页面，手动运行 `🧪 验证大模型`。
-
-API 地址可以是完整的 `/v1/chat/completions` 地址，也可以是以 `/v1` 结尾的基础地址。
-
-> 从 `1.7.5.2` 起，大模型参数改为 Loon 兼容的扁平字段；`1.7.5.3` 增加模型验证。旧版用户请在 Loon 中更新插件；如果设置没有刷新，删除旧插件后重新添加上面的地址。
-
-## 功能
-
-- 支持 OpenAI、OpenRouter、硅基流动、Ollama，以及其他 OpenAI 兼容接口
-- 可配置 API 地址、模型、API Key、温度、超时和附加请求头
-- 提供可手动运行的模型验证，区分连接、鉴权、模型、额度和响应格式问题
-- 按 40 条字幕分批翻译
-- 使用带编号的 JSON 输入输出校验，防止漏行和乱序
-- 保留 VTT、XML、JSON、YouTube/Spotify Protobuf 等上游处理链路
-- API Key 只传给本仓库的翻译脚本，并在设置调试日志中脱敏
-- 仍可选择 Google 或 Microsoft 翻译
-
-## 安全提示
-
-- 不要提交或分享填写了 API Key 的插件导出文件。
-- 建议保持日志等级为默认的 `WARN`。
-- 使用第三方兼容接口时，请自行确认其数据处理和隐私政策。
+- Loon 已启用脚本、复写与 MitM。
+- 目标 App 和字幕域名已按插件要求完成 HTTPS 解密。
+- 播放器中主动选择“翻译字幕”；安装插件不会自动替换当前字幕轨道。
+- 第三方模型服务的额度、速率限制和内容政策由对应服务商决定。
 
 ## 排错
 
-如果字幕没有翻译，请先把插件日志等级设为 `INFO`，重新播放并选择“翻译字幕”。日志中应显示 `vendor: LLM`，但不会显示完整 API Key。
+### 没有出现“翻译字幕”
 
-也可以先在 Loon 的脚本页面运行 `🧪 验证大模型`：成功时会弹出“模型可用”；失败时会提示连接失败、鉴权失败、地址或模型不存在、请求受限，或接口响应格式不兼容。
+检查插件是否启用、MitM 是否生效，以及是否安装了对应平台的专用插件。
 
-## 更新上游版本
+### 验证模型失败
 
-构建工具会下载最新的 DualSubs Universal 插件及对应翻译脚本，再应用 LLM 补丁：
+根据提示检查 API 地址、模型 ID、API Key、账户额度和附加请求头。
+
+### 验证成功但没有译文
+
+1. 确认已选择播放器中的“翻译字幕”。
+2. 把日志等级改为 `INFO`。
+3. 重新播放并查看日志是否出现 `vendor: LLM`。
+4. 更新配置后再次运行 `🧪 验证大模型`。
+
+## 开发与验证
+
+重新生成 Universal LLM 插件：
 
 ```bash
 node tools/build-dualsubs-llm.mjs
 ```
 
-生成文件：
-
-- `Plugins/DualSubs.Universal.LLM.plugin`
-- `Scripts/DualSubs/Translate.response.bundle.js`
-- `Scripts/DualSubs/ValidateModel.js`
-
-## 验证
+重新生成 YouTube、Netflix 和 Spotify LLM 插件：
 
 ```bash
-node --check tools/build-dualsubs-llm.mjs
-node --check Scripts/DualSubs/Translate.response.bundle.js
-node --check Scripts/DualSubs/ValidateModel.js
+node tools/build-platform-plugins.mjs
 ```
 
-## 致谢与许可
+运行全部测试：
 
-字幕解析和平台适配逻辑来自 [DualSubs Universal](https://github.com/DualSubs/Universal)。本仓库保留上游 Apache License 2.0 许可文件。
+```bash
+node --test tests/*.test.mjs
+```
+
+## 安全提示
+
+- 不要提交或分享包含 API Key 的插件导出文件或日志。
+- 建议日常使用 `WARN` 日志等级，排错时临时切换到 `INFO`。
+- 使用第三方兼容接口前，请确认其数据处理和隐私政策。
+
+## 上游与许可
+
+字幕解析、播放器适配和双语合成能力来自 [DualSubs](https://dualsubs.github.io/index.html) 及其开源仓库：
+
+- [DualSubs/Universal](https://github.com/DualSubs/Universal)
+- [DualSubs/YouTube](https://github.com/DualSubs/YouTube)
+- [DualSubs/Netflix](https://github.com/DualSubs/Netflix)
+- [DualSubs/Spotify](https://github.com/DualSubs/Spotify)
+
+本项目由 [zwjtano](https://github.com/zwjtano) 维护，并保留上游 Apache License 2.0 许可文件。
