@@ -18,12 +18,10 @@
 
 | 插件 | 用途 | 当前版本 | 安装 |
 | --- | --- | --- | --- |
-| 🔣 **Universal** | 为 Apple TV+、Disney+、Prime Video、Max 等 HLS 平台添加翻译字幕 | `1.7.5.8` | [在 Loon 中安装](https://raw.githubusercontent.com/zwjtano/DualSubs-Universal-LLM/main/Plugins/DualSubs.Universal.LLM.plugin) |
-| ▶️ **YouTube (Music)** | YouTube 双语字幕、YouTube Music 翻译歌词 | `1.5.11.5` | [在 Loon 中安装](https://raw.githubusercontent.com/zwjtano/DualSubs-Universal-LLM/main/Plugins/DualSubs.YouTube.LLM.plugin) |
+| 🔣 **Universal** | 为 Apple TV+、Disney+、Prime Video、Max 等 HLS 平台添加翻译字幕 | `1.0.4` | [在 Loon 中安装](https://raw.githubusercontent.com/zwjtano/DualSubs-Universal-LLM/main/Plugins/DualSubs.Universal.LLM.plugin) |
 | 🇳 **Netflix** | Netflix 兼容模式双语翻译字幕 | `0.5.7.5` | [在 Loon 中安装](https://raw.githubusercontent.com/zwjtano/DualSubs-Universal-LLM/main/Plugins/DualSubs.Netflix.LLM.plugin) |
-| 🎵 **Spotify** | Spotify 歌词翻译与外部歌词补全 | `1.9.12.5` | [在 Loon 中安装](https://raw.githubusercontent.com/zwjtano/DualSubs-Universal-LLM/main/Plugins/DualSubs.Spotify.LLM.plugin) |
 
-> Universal 不包含 YouTube、Netflix 和 Spotify 的专用规则，请按实际使用的平台分别安装。
+> Universal 不包含 Netflix 的专用规则，如需使用 Netflix，请另外安装对应插件。
 
 ## 快速开始
 
@@ -40,7 +38,7 @@
 
 - **上下文翻译**：按批次把相邻字幕交给大模型，改善指代、语气和专有名词一致性。
 - **严格行序校验**：使用带编号的 JSON 输入输出，检查漏行、乱序和数量不一致。
-- **多格式支持**：保留上游 VTT、XML、JSON 以及 YouTube、Spotify Protobuf 处理链路。
+- **多格式支持**：保留上游 VTT、XML、JSON 和 Protobuf 处理链路。
 - **双语合成**：将原文和译文重新写回字幕或歌词响应，保持原播放器体验。
 - **模型验证**：区分连接、鉴权、模型、额度、限流和响应格式问题。
 - **配置保护**：日志对 API Key 脱敏；密钥仅传给用户配置的模型服务。
@@ -111,7 +109,7 @@ DualSubs 识别平台与字幕格式
 node tools/build-dualsubs-llm.mjs
 ```
 
-重新生成 YouTube、Netflix 和 Spotify LLM 插件：
+重新生成 Netflix LLM 插件：
 
 ```bash
 node tools/build-platform-plugins.mjs
@@ -134,8 +132,6 @@ node --test tests/*.test.mjs
 字幕解析、播放器适配和双语合成能力来自 [DualSubs](https://dualsubs.github.io/index.html) 及其开源仓库：
 
 - [DualSubs/Universal](https://github.com/DualSubs/Universal)
-- [DualSubs/YouTube](https://github.com/DualSubs/YouTube)
 - [DualSubs/Netflix](https://github.com/DualSubs/Netflix)
-- [DualSubs/Spotify](https://github.com/DualSubs/Spotify)
 
 本项目由 [zwjtano](https://github.com/zwjtano) 维护，并保留上游 Apache License 2.0 许可文件。

@@ -3,31 +3,15 @@ import { dirname, resolve } from "node:path";
 
 const root = resolve(import.meta.dirname, "..");
 const sharedScriptVersion = "1.0.4";
-const pluginVersions = {
-  YouTube: "1.0.4",
-  Spotify: "1.0.4",
-};
 const translateUrl = `https://raw.githubusercontent.com/zwjtano/DualSubs-Universal-LLM/main/Scripts/DualSubs/Translate.response.bundle.js?v=${sharedScriptVersion}`;
 const validateUrl = "https://raw.githubusercontent.com/zwjtano/DualSubs-Universal-LLM/main/Scripts/DualSubs/ValidateModel.js";
 
 const platforms = [
   {
-    name: "YouTube",
-    source: "https://github.com/DualSubs/YouTube/releases/latest/download/DualSubs.YouTube.plugin",
-    fallback: "C:/tmp/dualsubs-platforms/DualSubs.YouTube.plugin",
-    output: "Plugins/DualSubs.YouTube.LLM.plugin",
-  },
-  {
     name: "Netflix",
     source: "https://github.com/DualSubs/Netflix/releases/latest/download/DualSubs.Netflix.plugin",
     fallback: "C:/tmp/dualsubs-platforms/DualSubs.Netflix.plugin",
     output: "Plugins/DualSubs.Netflix.LLM.plugin",
-  },
-  {
-    name: "Spotify",
-    source: "https://github.com/DualSubs/Spotify/releases/latest/download/DualSubs.Spotify.plugin",
-    fallback: "C:/tmp/dualsubs-platforms/DualSubs.Spotify.plugin",
-    output: "Plugins/DualSubs.Spotify.LLM.plugin",
   },
 ];
 
@@ -45,7 +29,7 @@ function patchPlugin(source, platform) {
   if (!upstreamVersion) throw new Error(`${platform}: missing upstream version`);
   // The YouTube LLM fork has its own release line. Keep the upstream
   // platform version only for the other generated plugins.
-  const version = pluginVersions[platform] ?? `${upstreamVersion}.5`;
+  const version = `${upstreamVersion}.5`;
 
   source = source
     .replace(/^(#!name\s*=\s*.+)$/m, `$1 LLM v${version}`)
@@ -74,26 +58,6 @@ function patchPlugin(source, platform) {
       `[Script]\ngeneric script-path=${validateUrl},tag=🧪 验证大模型,timeout=60,img-url=checkmark.seal.fill,argument=[{LLMEndpoint},{LLMModel},{LLMAuth},{LLMTimeout},{LLMHeaders}],enable=true\n\n`,
     );
 
-  if (platform === "YouTube") {
-    source = source.replace(
-      'Type = select,"Official","Translate",',
-      'Type = select,"Translate","Official",',
-    );
-  }
-
-  if (platform === "Spotify") {
-    // Recent Spotify clients keep the original color-lyrics URL on the
-    // response, so a rule requiring the synthetic subtype never fires.
-    source = source
-      .replace(
-        /\\\?\(\.\*\)format=json\(\.\*\)subtype=Translate/g,
-        "\\?(.*)format=json",
-      )
-      .replace(
-        /\\w\+\\\?\(\.\*\)subtype=Translate/g,
-        "\\w+\\?(?!.*format=json)(.*)",
-      );
-  }
 
   source = source
     .split("\n")
@@ -120,9 +84,6 @@ function patchPlugin(source, platform) {
 
   if (!source.includes(translateUrl)) throw new Error(`${platform}: translate script was not replaced`);
   if (!source.includes("LLMEndpoint = input")) throw new Error(`${platform}: LLM settings were not added`);
-  if (platform === "YouTube" && !source.includes('Type = select,"Translate","Official",')) {
-    throw new Error("YouTube: Translate is not the default subtitle type");
-  }
   return source;
 }
 

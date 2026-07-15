@@ -1,19 +1,13 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 
-const pluginVersions = { YouTube: "1.0.4", Spotify: "1.0.4" };
-
-for (const platform of ["YouTube", "Netflix", "Spotify"]) {
+for (const platform of ["Netflix"]) {
   const source = await readFile(
     new URL(`../Plugins/DualSubs.${platform}.LLM.plugin`, import.meta.url),
     "utf8",
   );
   assert.match(source, new RegExp(`#!name = .*${platform}.* LLM v`));
-  if (pluginVersions[platform]) {
-    assert.match(source, new RegExp(`^#!version = ${pluginVersions[platform].replaceAll(".", "\\.")}$`, "m"));
-  } else {
-    assert.match(source, /^#!version = \d+(?:\.\d+){3}$/m);
-  }
+  assert.match(source, /^#!version = \d+(?:\.\d+){3}$/m);
   assert.match(source, /^#!author = zwjtano\[https:\/\/github\.com\/zwjtano\]$/m);
   assert.match(source, /^#!homepage = https:\/\/github\.com\/zwjtano\/DualSubs-Universal-LLM$/m);
   assert.match(source, /Vendor = select,"LLM","Google","Microsoft"/);
@@ -35,16 +29,7 @@ for (const platform of ["YouTube", "Netflix", "Spotify"]) {
       /\{LLMEndpoint\},\{LLMModel\},\{LLMAuth\},\{LLMTemperature\},\{LLMTimeout\},\{LLMHeaders\}/,
     );
   }
-  if (platform === "YouTube") {
-    assert.match(source, /^#!name = .*YouTube.* LLM v1\.0\.4$/m);
-    assert.match(source, /^Type = select,"Translate","Official",/m);
-  }
   assert.doesNotMatch(source, /\{Languages\[0,\{LLMEndpoint\}/);
-  if (platform === "Spotify") {
-    assert.match(source, /^#!name = .*Spotify.* LLM v1\.0\.4$/m);
-    assert.ok(source.includes("track\\/\\w+\\?(?!.*format=json)(.*) requires-body=1, timeout=180"));
-    assert.doesNotMatch(source, /subtype=Translate.*Translate\.response/);
-  }
 }
 
 console.log("platform plugin tests passed");
