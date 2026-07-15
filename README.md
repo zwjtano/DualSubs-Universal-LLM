@@ -12,6 +12,14 @@
 https://raw.githubusercontent.com/zwjtano/DualSubs-Universal-LLM/main/Plugins/DualSubs.Universal.LLM.plugin
 ```
 
+其他平台的 LLM 版插件：
+
+- YouTube: `https://raw.githubusercontent.com/zwjtano/DualSubs-Universal-LLM/main/Plugins/DualSubs.YouTube.LLM.plugin`
+- Netflix: `https://raw.githubusercontent.com/zwjtano/DualSubs-Universal-LLM/main/Plugins/DualSubs.Netflix.LLM.plugin`
+- Spotify: `https://raw.githubusercontent.com/zwjtano/DualSubs-Universal-LLM/main/Plugins/DualSubs.Spotify.LLM.plugin`
+
+每个插件配置后都需手动运行一次“验证大模型”，以保存供翻译响应脚本使用的配置。
+
 安装后打开插件设置：
 
 1. 将“服务商 API”选择为 `LLM`。

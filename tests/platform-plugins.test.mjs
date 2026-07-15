@@ -1,0 +1,20 @@
+import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
+
+for (const platform of ["YouTube", "Netflix", "Spotify"]) {
+  const source = await readFile(
+    new URL(`../Plugins/DualSubs.${platform}.LLM.plugin`, import.meta.url),
+    "utf8",
+  );
+  assert.match(source, new RegExp(`#!name = .*${platform}.* LLM v`));
+  assert.match(source, /^#!version = \d+(?:\.\d+){3}$/m);
+  assert.match(source, /Vendor = select,"LLM","Google","Microsoft"/);
+  assert.match(source, /LLMEndpoint = input/);
+  assert.match(source, /🧪 验证大模型/);
+  assert.match(
+    source,
+    /DualSubs-Universal-LLM\/main\/Scripts\/DualSubs\/Translate\.response\.bundle\.js\?v=1\.7\.5\.6/,
+  );
+}
+
+console.log("platform plugin tests passed");
