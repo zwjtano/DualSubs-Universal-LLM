@@ -2,7 +2,7 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 
 const root = resolve(import.meta.dirname, "..");
-const llmVersion = "1.7.5.7";
+const llmVersion = "1.7.5.8";
 const translateUrl = `https://raw.githubusercontent.com/zwjtano/DualSubs-Universal-LLM/main/Scripts/DualSubs/Translate.response.bundle.js?v=${llmVersion}`;
 const validateUrl = "https://raw.githubusercontent.com/zwjtano/DualSubs-Universal-LLM/main/Scripts/DualSubs/ValidateModel.js";
 
@@ -39,7 +39,7 @@ async function load(url, fallback) {
 function patchPlugin(source, platform) {
   const upstreamVersion = source.match(/^#!version\s*=\s*(.+)$/m)?.[1]?.trim();
   if (!upstreamVersion) throw new Error(`${platform}: missing upstream version`);
-  const version = `${upstreamVersion}.4`;
+  const version = `${upstreamVersion}.5`;
 
   source = source
     .replace(/^(#!name\s*=\s*.+)$/m, `$1 LLM v${version}`)
@@ -73,6 +73,15 @@ function patchPlugin(source, platform) {
       'Type = select,"Translate","Official",',
     );
   }
+
+  source = source
+    .split("\n")
+    .map((line) => {
+      if (!line.includes(translateUrl) || /\btimeout\s*=/.test(line)) return line;
+      if (line.includes("requires-body=1,")) return line.replace("requires-body=1,", "requires-body=1, timeout=180,");
+      return line.replace("script-path=", "timeout=180, script-path=");
+    })
+    .join("\n");
 
   if (!source.includes(translateUrl)) throw new Error(`${platform}: translate script was not replaced`);
   if (!source.includes("LLMEndpoint = input")) throw new Error(`${platform}: LLM settings were not added`);
