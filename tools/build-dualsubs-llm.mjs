@@ -5,7 +5,7 @@ const root = resolve(import.meta.dirname, "..");
 const upstreamPluginUrl =
   "https://github.com/DualSubs/Universal/releases/latest/download/DualSubs.Universal.plugin";
 const localScriptUrl =
-  "https://raw.githubusercontent.com/zwjtano/DualSubs-Universal-LLM/main/Scripts/DualSubs/Translate.response.bundle.js";
+  "https://raw.githubusercontent.com/zwjtano/DualSubs-Universal-LLM/main/Scripts/DualSubs/Translate.response.bundle.js?v=1.7.5.4";
 const validateScriptUrl =
   "https://raw.githubusercontent.com/zwjtano/DualSubs-Universal-LLM/main/Scripts/DualSubs/ValidateModel.js";
 
@@ -203,7 +203,7 @@ function patchBundle(source) {
 function patchPlugin(source) {
   source = source
     .replace("#!name = 🍿️ DualSubs: 🔣 Universal", "#!name = 🍿️ DualSubs: 🔣 Universal LLM")
-    .replace(/^#!version\s*=\s*(.+)$/m, (_, version) => `#!version = ${version.trim()}.3`)
+    .replace(/^#!version\s*=\s*(.+)$/m, (_, version) => `#!version = ${version.trim()}.4`)
     .replace(/^#!date\s*=.*$/m, "#!date = 2026-07-15 04:00:00")
     .replace(
       /#!desc = .*/,
