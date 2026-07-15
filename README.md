@@ -31,6 +31,10 @@
 
 验证脚本会保存已验证的模型配置，供字幕响应脚本读取。更换 API 地址、模型或密钥后，需要重新运行一次验证。
 
+## 实验版
+
+- [YouTube 双语翻译 LLM v1.0.0](https://raw.githubusercontent.com/zwjtano/DualSubs-Universal-LLM/main/Experimental/YouTubeSubtitlesTranslation.LLM.lpx)：基于可莉的新版 YouTube 字幕轨道与合成规则，仅替换大模型翻译阶段。请勿与其他 YouTube 字幕翻译插件同时启用。
+
 ## 核心能力
 
 - **上下文翻译**：按批次把相邻字幕交给大模型，改善指代、语气和专有名词一致性。
