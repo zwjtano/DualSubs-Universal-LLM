@@ -1,5 +1,5 @@
-#!name = 🍿️ DualSubs: 🇳 Netflix LLM v0.5.7.3
-#!desc = Netflix 增强及双语字幕\nLLM 翻译版 v0.5.7.3
+#!name = 🍿️ DualSubs: 🇳 Netflix LLM v0.5.7.4
+#!desc = Netflix 增强及双语字幕\nLLM 翻译版 v0.5.7.4
 #!openUrl = http://boxjs.com/#/app/DualSubs.Netflix
 #!author = zwjtano[https://github.com/zwjtano]
 #!homepage = https://github.com/zwjtano/DualSubs-Universal-LLM
@@ -7,7 +7,7 @@
 #!tag = 🍿️ DualSubs
 #!system = iOS,iPadOS,macOS,tvOS
 #!date = 2024-12-10 08:53:59
-#!version = 0.5.7.3
+#!version = 0.5.7.4
 #!system_version = 15
 
 [Argument]
@@ -20,12 +20,12 @@ LLMEndpoint = input,"https://api.openai.com/v1/chat/completions",tag=[大模型]
 LLMModel = input,"gpt-4.1-mini",tag=[大模型] 模型名称
 LLMAuth = input,"",tag=[大模型] API Key
 LLMTimeout = input,"120000",tag=[大模型] 超时毫秒
-LLMHeaders = input,"{}",tag=[大模型] 附加请求头,desc=可选 JSON 对象
+LLMHeaders = input,"",tag=[大模型] 附加请求头,desc=可选 JSON 对象
 ShowOnly = switch,false,tag=[翻译器] 只显示翻译字幕,desc=是否仅显示翻译后字幕，不显示源语言字幕。
 LogLevel = select,"WARN","OFF","ERROR","INFO","DEBUG","ALL",tag=[调试] 日志等级,desc=选择脚本日志的输出等级，低于所选等级的日志将全部输出。
 
 [Script]
-generic script-path=https://raw.githubusercontent.com/zwjtano/DualSubs-Universal-LLM/main/Scripts/DualSubs/ValidateModel.js?v=1.7.5.7,tag=🧪 验证大模型,timeout=60,img-url=checkmark.seal.fill,argument=[{LLMEndpoint},{LLMModel},{LLMAuth},{LLMTimeout},{LLMHeaders}],enable=true
+generic script-path=https://raw.githubusercontent.com/zwjtano/DualSubs-Universal-LLM/main/Scripts/DualSubs/ValidateModel.js,tag=🧪 验证大模型,timeout=60,img-url=checkmark.seal.fill,argument=[{LLMEndpoint},{LLMModel},{LLMAuth},{LLMTimeout},{LLMHeaders}],enable=true
 
 http-response ^https?:\/\/(.+)\.oca\.nflxvideo\.net\/\?o=\d+&v=\d+&e=\d+&t=.+ requires-body=1, script-path=https://raw.githubusercontent.com/zwjtano/DualSubs-Universal-LLM/main/Scripts/DualSubs/Translate.response.bundle.js?v=1.7.5.7, tag=🍿️ DualSubs.Netflix.Translate.Subtitles.response
 
