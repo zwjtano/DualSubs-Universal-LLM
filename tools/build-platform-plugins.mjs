@@ -2,7 +2,7 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 
 const root = resolve(import.meta.dirname, "..");
-const llmVersion = "1.7.5.8";
+const llmVersion = "1.7.5.9";
 const translateUrl = `https://raw.githubusercontent.com/zwjtano/DualSubs-Universal-LLM/main/Scripts/DualSubs/Translate.response.bundle.js?v=${llmVersion}`;
 const validateUrl = "https://raw.githubusercontent.com/zwjtano/DualSubs-Universal-LLM/main/Scripts/DualSubs/ValidateModel.js";
 
@@ -54,6 +54,7 @@ function patchPlugin(source, platform) {
         'LLMEndpoint = input,"https://api.openai.com/v1/chat/completions",tag=[大模型] API 地址',
         'LLMModel = input,"gpt-4.1-mini",tag=[大模型] 模型名称',
         'LLMAuth = input,"",tag=[大模型] API Key',
+        'LLMTemperature = input,"0.2",tag=[大模型] 温度',
         'LLMTimeout = input,"120000",tag=[大模型] 超时毫秒',
         'LLMHeaders = input,"",tag=[大模型] 附加请求头,desc=可选 JSON 对象',
       ].join("\n"),
@@ -77,9 +78,23 @@ function patchPlugin(source, platform) {
   source = source
     .split("\n")
     .map((line) => {
-      if (!line.includes(translateUrl) || /\btimeout\s*=/.test(line)) return line;
-      if (line.includes("requires-body=1,")) return line.replace("requires-body=1,", "requires-body=1, timeout=180,");
-      return line.replace("script-path=", "timeout=180, script-path=");
+      if (!line.includes(translateUrl)) return line;
+      if (!/\btimeout\s*=/.test(line)) {
+        line = line.includes("requires-body=1,")
+          ? line.replace("requires-body=1,", "requires-body=1, timeout=180,")
+          : line.replace("script-path=", "timeout=180, script-path=");
+      }
+      const llmArguments = "{LLMEndpoint},{LLMModel},{LLMAuth},{LLMTemperature},{LLMTimeout},{LLMHeaders}";
+      if (!line.includes("{LLMEndpoint}")) {
+        if (/argument=\[([^\]]*)\]/.test(line)) {
+          line = line.replace(/argument=\[([^\]]*)\]/, (_, args) =>
+            `argument=[${args},${llmArguments}]`,
+          );
+        } else {
+          line += `, argument=[${llmArguments}]`;
+        }
+      }
+      return line;
     })
     .join("\n");
 
