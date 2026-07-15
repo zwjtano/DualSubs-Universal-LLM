@@ -2,10 +2,11 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 
 const root = resolve(import.meta.dirname, "..");
+const llmVersion = "1.7.5.6";
 const upstreamPluginUrl =
   "https://github.com/DualSubs/Universal/releases/latest/download/DualSubs.Universal.plugin";
 const localScriptUrl =
-  "https://raw.githubusercontent.com/zwjtano/DualSubs-Universal-LLM/main/Scripts/DualSubs/Translate.response.bundle.js?v=1.7.5.5";
+  `https://raw.githubusercontent.com/zwjtano/DualSubs-Universal-LLM/main/Scripts/DualSubs/Translate.response.bundle.js?v=${llmVersion}`;
 const validateScriptUrl =
   "https://raw.githubusercontent.com/zwjtano/DualSubs-Universal-LLM/main/Scripts/DualSubs/ValidateModel.js";
 
@@ -64,6 +65,10 @@ try {
     if (!parsed || Array.isArray(parsed) || typeof parsed !== "object") throw new Error("附加请求头必须是 JSON 对象");
     Object.assign(headers, parsed);
   }
+  $persistentStore.write(
+    JSON.stringify({ LLMEndpoint: endpoint, LLMModel: model, LLMAuth: auth, LLMTimeout: timeout, LLMHeaders: extraHeaders || "" }),
+    "DualSubsLLMConfig",
+  );
 
   $httpClient.post(
     {
@@ -186,7 +191,7 @@ function patchBundle(source) {
   source = replaceOnce(
     source,
     "r.logLevel=t.LogLevel;let o=",
-    'r.logLevel=t.LogLevel;let eQ=e=>{let a=t[e];if(null==a||""===a)try{a=$persistentStore.read(e)}catch(e){}return a};t.LLM={...t.LLM,Endpoint:eQ("LLMEndpoint")??t.LLM?.Endpoint,Model:eQ("LLMModel")??t.LLM?.Model,Auth:eQ("LLMAuth")??t.LLM?.Auth,Temperature:eQ("LLMTemperature")??t.LLM?.Temperature,Timeout:eQ("LLMTimeout")??t.LLM?.Timeout,Headers:eQ("LLMHeaders")??t.LLM?.Headers};let o=',
+    'r.logLevel=t.LogLevel;let eR={};try{eR=JSON.parse($persistentStore.read("DualSubsLLMConfig")||"{}")}catch(e){}let eQ=e=>{let a=t[e];if(null==a||""===a)a=eR[e];if(null==a||""===a)try{a=$persistentStore.read(e)}catch(e){}return a};t.LLM={...t.LLM,Endpoint:eQ("LLMEndpoint")??t.LLM?.Endpoint,Model:eQ("LLMModel")??t.LLM?.Model,Auth:eQ("LLMAuth")??t.LLM?.Auth,Temperature:eQ("LLMTemperature")??t.LLM?.Temperature,Timeout:eQ("LLMTimeout")??t.LLM?.Timeout,Headers:eQ("LLMHeaders")??t.LLM?.Headers};let o=',
     "Loon 参数与持久化设置转为 LLM 配置",
   );
 
@@ -202,12 +207,12 @@ function patchBundle(source) {
 
 function patchPlugin(source) {
   source = source
-    .replace("#!name = 🍿️ DualSubs: 🔣 Universal", "#!name = 🍿️ DualSubs: 🔣 Universal LLM")
-    .replace(/^#!version\s*=\s*(.+)$/m, (_, version) => `#!version = ${version.trim()}.5`)
+    .replace("#!name = 🍿️ DualSubs: 🔣 Universal", `#!name = 🍿️ DualSubs: 🔣 Universal LLM v${llmVersion}`)
+    .replace(/^#!version\s*=\s*(.+)$/m, `#!version = ${llmVersion}`)
     .replace(/^#!date\s*=.*$/m, "#!date = 2026-07-15 04:00:00")
     .replace(
       /#!desc = .*/,
-      "#!desc = DualSubs Universal 的大模型翻译版\\n支持 OpenAI 兼容的 Chat Completions API",
+      `#!desc = DualSubs Universal 的大模型翻译版 v${llmVersion}\\n支持 OpenAI 兼容的 Chat Completions API`,
     );
 
   source = replaceOnce(

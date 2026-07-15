@@ -53,6 +53,10 @@ try {
     if (!parsed || Array.isArray(parsed) || typeof parsed !== "object") throw new Error("附加请求头必须是 JSON 对象");
     Object.assign(headers, parsed);
   }
+  $persistentStore.write(
+    JSON.stringify({ LLMEndpoint: endpoint, LLMModel: model, LLMAuth: auth, LLMTimeout: timeout, LLMHeaders: extraHeaders || "" }),
+    "DualSubsLLMConfig",
+  );
 
   $httpClient.post(
     {
