@@ -1,5 +1,5 @@
-#!name = 🍿️ DualSubs: 🇳 Netflix LLM v0.5.7.2
-#!desc = Netflix 增强及双语字幕\nLLM 翻译版 v0.5.7.2
+#!name = 🍿️ DualSubs: 🇳 Netflix LLM v0.5.7.3
+#!desc = Netflix 增强及双语字幕\nLLM 翻译版 v0.5.7.3
 #!openUrl = http://boxjs.com/#/app/DualSubs.Netflix
 #!author = zwjtano[https://github.com/zwjtano]
 #!homepage = https://github.com/zwjtano/DualSubs-Universal-LLM
@@ -7,7 +7,7 @@
 #!tag = 🍿️ DualSubs
 #!system = iOS,iPadOS,macOS,tvOS
 #!date = 2024-12-10 08:53:59
-#!version = 0.5.7.2
+#!version = 0.5.7.3
 #!system_version = 15
 
 [Argument]
