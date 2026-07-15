@@ -2,7 +2,7 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 
 const root = resolve(import.meta.dirname, "..");
-const llmVersion = "1.7.5.8";
+const llmVersion = "1.7.5.10";
 const upstreamPluginUrl =
   "https://github.com/DualSubs/Universal/releases/latest/download/DualSubs.Universal.plugin";
 const localScriptUrl =
@@ -184,8 +184,22 @@ function patchBundle(source) {
   source = replaceOnce(
     source,
     'case"DeepLX":g=20}',
-    'case"DeepLX":g=20;break;case"LLM":g=40}',
+    'case"DeepLX":g=20;break;case"LLM":g=100}',
     "LLM 分批大小",
+  );
+
+  source = replaceOnce(
+    source,
+    'c=await Promise.all(t.map(async t=>await eX(()=>new L({Source:n,Target:s,API:i})[e](t),o,l,u))).then(e=>e.flat(1/0));',
+    'if("LLM"===e){for(let a of t)c.push(...await eX(()=>new L({Source:n,Target:s,API:i})[e](a),o,l,u))}else c=await Promise.all(t.map(async t=>await eX(()=>new L({Source:n,Target:s,API:i})[e](t),o,l,u))).then(e=>e.flat(1/0));',
+    "LLM sequential batches",
+  );
+
+  source = replaceOnce(
+    source,
+    'let o=e_.searchParams?.get("subtype")??t.Type,l=[e_.searchParams?.get("lang")?.toUpperCase?.()??t.Languages[0],(e_.searchParams?.get("tlang")??a?.tlang)?.toUpperCase?.()??t.Languages[1]];',
+    'let o=e_.searchParams?.get("subtype")??t.Type,l=[e_.searchParams?.get("lang")?.toUpperCase?.()??t.Languages[0],(e_.searchParams?.get("tlang")??t.Languages[1]??a?.tlang)?.toUpperCase?.()??"ZH"];',
+    "configured target language priority",
   );
 
   source = replaceOnce(

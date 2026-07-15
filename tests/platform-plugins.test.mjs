@@ -20,7 +20,7 @@ for (const platform of ["YouTube", "Netflix", "Spotify"]) {
   );
   assert.match(
     source,
-    /DualSubs-Universal-LLM\/main\/Scripts\/DualSubs\/Translate\.response\.bundle\.js\?v=1\.7\.5\.9/,
+    /DualSubs-Universal-LLM\/main\/Scripts\/DualSubs\/Translate\.response\.bundle\.js\?v=1\.7\.5\.10/,
   );
   for (const line of source.split("\n").filter((line) => line.includes("Translate.response.bundle.js"))) {
     assert.match(line, /timeout=180/);
