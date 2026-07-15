@@ -2,7 +2,7 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 
 const root = resolve(import.meta.dirname, "..");
-const llmVersion = "1.0.1";
+const llmVersion = "1.0.2";
 const upstreamPluginUrl =
   "https://github.com/DualSubs/Universal/releases/latest/download/DualSubs.Universal.plugin";
 const localScriptUrl =
@@ -198,7 +198,7 @@ function patchBundle(source) {
   source = replaceOnce(
     source,
     'c=await Promise.all(t.map(async t=>await eX(()=>new L({Source:n,Target:s,API:i})[e](t),o,l,u))).then(e=>e.flat(1/0));',
-    'if("LLM"===e){let a=0,g=new Array(t.length),d=Array.from({length:Math.min(3,t.length)},async()=>{for(;;){let c=a++;if(c>=t.length)break;g[c]=await eX(()=>new L({Source:n,Target:s,API:i})[e](t[c]),o,l,u)}});await Promise.all(d);c=g.flat(1/0)}else c=await Promise.all(t.map(async t=>await eX(()=>new L({Source:n,Target:s,API:i})[e](t),o,l,u))).then(e=>e.flat(1/0));',
+    'if("LLM"===e){let a=0,g=new Array(t.length),d=Array.from({length:Math.min(6,t.length)},async()=>{for(;;){let c=a++;if(c>=t.length)break;g[c]=await eX(()=>new L({Source:n,Target:s,API:i})[e](t[c]),o,l,u)}});await Promise.all(d);c=g.flat(1/0)}else c=await Promise.all(t.map(async t=>await eX(()=>new L({Source:n,Target:s,API:i})[e](t),o,l,u))).then(e=>e.flat(1/0));',
     "LLM bounded concurrent batches",
   );
 
