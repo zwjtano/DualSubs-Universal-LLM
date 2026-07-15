@@ -1,14 +1,16 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 
+const pluginVersions = { YouTube: "1.0.4", Spotify: "1.0.4" };
+
 for (const platform of ["YouTube", "Netflix", "Spotify"]) {
   const source = await readFile(
     new URL(`../Plugins/DualSubs.${platform}.LLM.plugin`, import.meta.url),
     "utf8",
   );
   assert.match(source, new RegExp(`#!name = .*${platform}.* LLM v`));
-  if (["YouTube", "Spotify"].includes(platform)) {
-    assert.match(source, /^#!version = 1\.0\.4$/m);
+  if (pluginVersions[platform]) {
+    assert.match(source, new RegExp(`^#!version = ${pluginVersions[platform].replaceAll(".", "\\.")}$`, "m"));
   } else {
     assert.match(source, /^#!version = \d+(?:\.\d+){3}$/m);
   }

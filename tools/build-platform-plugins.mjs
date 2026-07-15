@@ -2,8 +2,12 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 
 const root = resolve(import.meta.dirname, "..");
-const llmVersion = "1.0.4";
-const translateUrl = `https://raw.githubusercontent.com/zwjtano/DualSubs-Universal-LLM/main/Scripts/DualSubs/Translate.response.bundle.js?v=${llmVersion}`;
+const sharedScriptVersion = "1.0.4";
+const pluginVersions = {
+  YouTube: "1.0.4",
+  Spotify: "1.0.4",
+};
+const translateUrl = `https://raw.githubusercontent.com/zwjtano/DualSubs-Universal-LLM/main/Scripts/DualSubs/Translate.response.bundle.js?v=${sharedScriptVersion}`;
 const validateUrl = "https://raw.githubusercontent.com/zwjtano/DualSubs-Universal-LLM/main/Scripts/DualSubs/ValidateModel.js";
 
 const platforms = [
@@ -41,9 +45,7 @@ function patchPlugin(source, platform) {
   if (!upstreamVersion) throw new Error(`${platform}: missing upstream version`);
   // The YouTube LLM fork has its own release line. Keep the upstream
   // platform version only for the other generated plugins.
-  const version = ["YouTube", "Spotify"].includes(platform)
-    ? llmVersion
-    : `${upstreamVersion}.5`;
+  const version = pluginVersions[platform] ?? `${upstreamVersion}.5`;
 
   source = source
     .replace(/^(#!name\s*=\s*.+)$/m, `$1 LLM v${version}`)

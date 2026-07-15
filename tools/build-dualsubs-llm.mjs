@@ -2,11 +2,12 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 
 const root = resolve(import.meta.dirname, "..");
-const llmVersion = "1.0.4";
+const sharedScriptVersion = "1.0.4";
+const universalPluginVersion = "1.0.4";
 const upstreamPluginUrl =
   "https://github.com/DualSubs/Universal/releases/latest/download/DualSubs.Universal.plugin";
 const localScriptUrl =
-  `https://raw.githubusercontent.com/zwjtano/DualSubs-Universal-LLM/main/Scripts/DualSubs/Translate.response.bundle.js?v=${llmVersion}`;
+  `https://raw.githubusercontent.com/zwjtano/DualSubs-Universal-LLM/main/Scripts/DualSubs/Translate.response.bundle.js?v=${sharedScriptVersion}`;
 const validateScriptUrl =
   "https://raw.githubusercontent.com/zwjtano/DualSubs-Universal-LLM/main/Scripts/DualSubs/ValidateModel.js";
 
@@ -136,7 +137,7 @@ function patchBundle(source) {
   source = replaceOnce(
     source,
     'console.log("Version: 1.7.5")',
-    `console.log("Version: ${llmVersion}")`,
+    `console.log("Version: ${sharedScriptVersion}")`,
     "bundle display version",
   );
 
@@ -228,14 +229,14 @@ function patchBundle(source) {
 
 function patchPlugin(source) {
   source = source
-    .replace("#!name = 🍿️ DualSubs: 🔣 Universal", `#!name = 🍿️ DualSubs: 🔣 Universal LLM v${llmVersion}`)
+    .replace("#!name = 🍿️ DualSubs: 🔣 Universal", `#!name = 🍿️ DualSubs: 🔣 Universal LLM v${universalPluginVersion}`)
     .replace(/^#!author\s*=\s*.+$/m, "#!author = zwjtano[https://github.com/zwjtano]")
     .replace(/^#!homepage\s*=\s*.+$/m, "#!homepage = https://github.com/zwjtano/DualSubs-Universal-LLM")
-    .replace(/^#!version\s*=\s*(.+)$/m, `#!version = ${llmVersion}`)
+    .replace(/^#!version\s*=\s*(.+)$/m, `#!version = ${universalPluginVersion}`)
     .replace(/^#!date\s*=.*$/m, "#!date = 2026-07-15 04:00:00")
     .replace(
       /#!desc = .*/,
-      `#!desc = DualSubs Universal 的大模型翻译版 v${llmVersion}\\n支持 OpenAI 兼容的 Chat Completions API`,
+      `#!desc = DualSubs Universal 的大模型翻译版 v${universalPluginVersion}\\n支持 OpenAI 兼容的 Chat Completions API`,
     );
 
   source = replaceOnce(
