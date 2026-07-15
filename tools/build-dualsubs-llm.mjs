@@ -2,7 +2,7 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 
 const root = resolve(import.meta.dirname, "..");
-const llmVersion = "1.7.5.7";
+const llmVersion = "1.7.5.8";
 const upstreamPluginUrl =
   "https://github.com/DualSubs/Universal/releases/latest/download/DualSubs.Universal.plugin";
 const localScriptUrl =
@@ -246,10 +246,12 @@ function patchPlugin(source) {
   source = source
     .split("\n")
     .map((line) => {
-      if (!line.includes(localScriptUrl)) return line;
-      if (!line.includes(oldArgs)) throw new Error("翻译脚本行缺少参数列表");
-      patchedTranslateLines += 1;
-      return line.replace(oldArgs, newArgs);
+    if (!line.includes(localScriptUrl)) return line;
+    if (!line.includes(oldArgs)) throw new Error("翻译脚本行缺少参数列表");
+    patchedTranslateLines += 1;
+    line = line.replace(oldArgs, newArgs);
+    if (!/\btimeout\s*=/.test(line)) line = line.replace(" requires-body=1,", " requires-body=1, timeout=180,");
+    return line;
     })
     .join("\n");
   if (!patchedTranslateLines) throw new Error("没有翻译脚本行被加入 LLM 参数");
