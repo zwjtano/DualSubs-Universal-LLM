@@ -38,14 +38,15 @@ const completed = new Promise((resolve, reject) => {
     },
     $persistentStore: {
       read(key) {
-        return {
+        if (key !== "DualSubsLLMConfig") return null;
+        return JSON.stringify({
           LLMEndpoint: "https://example.com/v1/chat/completions",
           LLMModel: "test-model",
           LLMAuth: "test-key",
           LLMTemperature: "0.2",
           LLMTimeout: "30000",
           LLMHeaders: "",
-        }[key] ?? null;
+        });
       },
       write: () => true,
     },

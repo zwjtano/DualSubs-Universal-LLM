@@ -7,6 +7,7 @@ const source = await readFile(new URL("../Scripts/DualSubs/ValidateModel.js", im
 async function run(statusCode, data) {
   const notices = [];
   const requests = [];
+  const writes = [];
   const settings = {
     LLMEndpoint: "https://example.com/v1",
     LLMModel: "test-model",
@@ -17,7 +18,10 @@ async function run(statusCode, data) {
 
   await new Promise((resolve, reject) => {
     const context = {
-      $persistentStore: { read: (key) => settings[key] ?? null },
+      $persistentStore: {
+        read: (key) => settings[key] ?? null,
+        write: (value, key) => (writes.push({ key, value }), true),
+      },
       $notification: { post: (...args) => notices.push(args) },
       $httpClient: {
         post: (request, callback) => {
@@ -36,13 +40,15 @@ async function run(statusCode, data) {
     }
   });
 
-  return { notices, requests };
+  return { notices, requests, writes };
 }
 
 const success = await run(200, JSON.stringify({ choices: [{ message: { content: "OK" } }] }));
 assert.equal(success.requests[0].url, "https://example.com/v1/chat/completions");
 assert.equal(success.requests[0].headers.Authorization, "Bearer top-secret-value");
 assert.equal(success.requests[0].headers["X-Test"], "yes");
+assert.equal(success.writes[0].key, "DualSubsLLMConfig");
+assert.equal(JSON.parse(success.writes[0].value).LLMModel, "test-model");
 assert.match(success.notices[0][1], /模型可用/);
 assert.doesNotMatch(JSON.stringify(success.notices), /top-secret-value/);
 
