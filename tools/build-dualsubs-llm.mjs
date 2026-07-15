@@ -2,7 +2,7 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 
 const root = resolve(import.meta.dirname, "..");
-const llmVersion = "1.7.5.6";
+const llmVersion = "1.7.5.7";
 const upstreamPluginUrl =
   "https://github.com/DualSubs/Universal/releases/latest/download/DualSubs.Universal.plugin";
 const localScriptUrl =
@@ -208,6 +208,8 @@ function patchBundle(source) {
 function patchPlugin(source) {
   source = source
     .replace("#!name = 🍿️ DualSubs: 🔣 Universal", `#!name = 🍿️ DualSubs: 🔣 Universal LLM v${llmVersion}`)
+    .replace(/^#!author\s*=\s*.+$/m, "#!author = zwjtano[https://github.com/zwjtano]")
+    .replace(/^#!homepage\s*=\s*.+$/m, "#!homepage = https://github.com/zwjtano/DualSubs-Universal-LLM")
     .replace(/^#!version\s*=\s*(.+)$/m, `#!version = ${llmVersion}`)
     .replace(/^#!date\s*=.*$/m, "#!date = 2026-07-15 04:00:00")
     .replace(
