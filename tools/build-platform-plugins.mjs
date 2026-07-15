@@ -2,7 +2,7 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 
 const root = resolve(import.meta.dirname, "..");
-const llmVersion = "1.0.2";
+const llmVersion = "1.0.3";
 const translateUrl = `https://raw.githubusercontent.com/zwjtano/DualSubs-Universal-LLM/main/Scripts/DualSubs/Translate.response.bundle.js?v=${llmVersion}`;
 const validateUrl = "https://raw.githubusercontent.com/zwjtano/DualSubs-Universal-LLM/main/Scripts/DualSubs/ValidateModel.js";
 
@@ -88,8 +88,8 @@ function patchPlugin(source, platform) {
       }
       const llmArguments = "{LLMEndpoint},{LLMModel},{LLMAuth},{LLMTemperature},{LLMTimeout},{LLMHeaders}";
       if (!line.includes("{LLMEndpoint}")) {
-        if (/argument=\[([^\]]*)\]/.test(line)) {
-          line = line.replace(/argument=\[([^\]]*)\]/, (_, args) =>
+        if (/argument=\[(.*)\]$/.test(line)) {
+          line = line.replace(/argument=\[(.*)\]$/, (_, args) =>
             `argument=[${args},${llmArguments}]`,
           );
         } else {
