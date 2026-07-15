@@ -2,7 +2,7 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 
 const root = resolve(import.meta.dirname, "..");
-const llmVersion = "1.0.3";
+const llmVersion = "1.0.4";
 const upstreamPluginUrl =
   "https://github.com/DualSubs/Universal/releases/latest/download/DualSubs.Universal.plugin";
 const localScriptUrl =

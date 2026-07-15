@@ -2,7 +2,7 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 
 const root = resolve(import.meta.dirname, "..");
-const llmVersion = "1.0.3";
+const llmVersion = "1.0.4";
 const translateUrl = `https://raw.githubusercontent.com/zwjtano/DualSubs-Universal-LLM/main/Scripts/DualSubs/Translate.response.bundle.js?v=${llmVersion}`;
 const validateUrl = "https://raw.githubusercontent.com/zwjtano/DualSubs-Universal-LLM/main/Scripts/DualSubs/ValidateModel.js";
 
@@ -75,6 +75,20 @@ function patchPlugin(source, platform) {
       'Type = select,"Official","Translate",',
       'Type = select,"Translate","Official",',
     );
+  }
+
+  if (platform === "Spotify") {
+    // Recent Spotify clients keep the original color-lyrics URL on the
+    // response, so a rule requiring the synthetic subtype never fires.
+    source = source
+      .replace(
+        /\\\?\(\.\*\)format=json\(\.\*\)subtype=Translate/g,
+        "\\?(.*)format=json",
+      )
+      .replace(
+        /\\w\+\\\?\(\.\*\)subtype=Translate/g,
+        "\\w+\\?(?!.*format=json)(.*)",
+      );
   }
 
   source = source
