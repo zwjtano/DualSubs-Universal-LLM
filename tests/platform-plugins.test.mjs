@@ -8,7 +8,7 @@ for (const platform of ["YouTube", "Netflix", "Spotify"]) {
   );
   assert.match(source, new RegExp(`#!name = .*${platform}.* LLM v`));
   if (platform === "YouTube") {
-    assert.match(source, /^#!version = 1\.0\.0$/m);
+    assert.match(source, /^#!version = 1\.0\.1$/m);
   } else {
     assert.match(source, /^#!version = \d+(?:\.\d+){3}$/m);
   }
@@ -24,7 +24,7 @@ for (const platform of ["YouTube", "Netflix", "Spotify"]) {
   );
   assert.match(
     source,
-    /DualSubs-Universal-LLM\/main\/Scripts\/DualSubs\/Translate\.response\.bundle\.js\?v=1\.0\.0/,
+    /DualSubs-Universal-LLM\/main\/Scripts\/DualSubs\/Translate\.response\.bundle\.js\?v=1\.0\.1/,
   );
   for (const line of source.split("\n").filter((line) => line.includes("Translate.response.bundle.js"))) {
     assert.match(line, /timeout=180/);
@@ -34,7 +34,7 @@ for (const platform of ["YouTube", "Netflix", "Spotify"]) {
     );
   }
   if (platform === "YouTube") {
-    assert.match(source, /^#!name = .*YouTube.* LLM v1\.0\.0$/m);
+    assert.match(source, /^#!name = .*YouTube.* LLM v1\.0\.1$/m);
     assert.match(source, /^Type = select,"Translate","Official",/m);
   }
 }
