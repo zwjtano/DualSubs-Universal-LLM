@@ -25,23 +25,30 @@ const completed = new Promise((resolve, reject) => {
       headers: { "Content-Type": "text/vtt" },
       body: "WEBVTT\n\n00:00:00.000 --> 00:00:02.000\nHello world\n",
     },
-    // Loon supplies plugin `argument=[...]` values as a positional array.
-    $argument: [
-      "Translate",
-      "EN",
-      "ZH",
-      "Forward",
-      "LLM",
-      "https://example.com/v1/chat/completions",
-      "test-model",
-      "test-key",
-      "0.2",
-      "30000",
-      "",
-      "false",
-      "INFO",
-    ],
-    $persistentStore: { read: () => null, write: () => true },
+    // Reproduce Loon dropping the extended argument list: only the original
+    // settings arrive, while plugin inputs remain available in persistence.
+    $argument: {
+      Types: "Translate",
+      "Languages[0]": "EN",
+      "Languages[1]": "ZH",
+      Position: "Forward",
+      Vendor: "LLM",
+      ShowOnly: "false",
+      LogLevel: "INFO",
+    },
+    $persistentStore: {
+      read(key) {
+        return {
+          LLMEndpoint: "https://example.com/v1/chat/completions",
+          LLMModel: "test-model",
+          LLMAuth: "test-key",
+          LLMTemperature: "0.2",
+          LLMTimeout: "30000",
+          LLMHeaders: "",
+        }[key] ?? null;
+      },
+      write: () => true,
+    },
     $notification: { post: () => {} },
     $httpClient: {
       post(options, callback) {

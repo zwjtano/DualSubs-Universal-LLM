@@ -5,7 +5,7 @@ const root = resolve(import.meta.dirname, "..");
 const upstreamPluginUrl =
   "https://github.com/DualSubs/Universal/releases/latest/download/DualSubs.Universal.plugin";
 const localScriptUrl =
-  "https://raw.githubusercontent.com/zwjtano/DualSubs-Universal-LLM/main/Scripts/DualSubs/Translate.response.bundle.js?v=1.7.5.4";
+  "https://raw.githubusercontent.com/zwjtano/DualSubs-Universal-LLM/main/Scripts/DualSubs/Translate.response.bundle.js?v=1.7.5.5";
 const validateScriptUrl =
   "https://raw.githubusercontent.com/zwjtano/DualSubs-Universal-LLM/main/Scripts/DualSubs/ValidateModel.js";
 
@@ -186,8 +186,8 @@ function patchBundle(source) {
   source = replaceOnce(
     source,
     "r.logLevel=t.LogLevel;let o=",
-    'r.logLevel=t.LogLevel,t.LLM={...t.LLM,Endpoint:t.LLMEndpoint??t.LLM?.Endpoint,Model:t.LLMModel??t.LLM?.Model,Auth:t.LLMAuth??t.LLM?.Auth,Temperature:t.LLMTemperature??t.LLM?.Temperature,Timeout:t.LLMTimeout??t.LLM?.Timeout,Headers:t.LLMHeaders??t.LLM?.Headers};let o=',
-    "扁平 Loon 参数转为 LLM 配置",
+    'r.logLevel=t.LogLevel;let eQ=e=>{let a=t[e];if(null==a||""===a)try{a=$persistentStore.read(e)}catch(e){}return a};t.LLM={...t.LLM,Endpoint:eQ("LLMEndpoint")??t.LLM?.Endpoint,Model:eQ("LLMModel")??t.LLM?.Model,Auth:eQ("LLMAuth")??t.LLM?.Auth,Temperature:eQ("LLMTemperature")??t.LLM?.Temperature,Timeout:eQ("LLMTimeout")??t.LLM?.Timeout,Headers:eQ("LLMHeaders")??t.LLM?.Headers};let o=',
+    "Loon 参数与持久化设置转为 LLM 配置",
   );
 
   source = replaceOnce(
@@ -203,7 +203,7 @@ function patchBundle(source) {
 function patchPlugin(source) {
   source = source
     .replace("#!name = 🍿️ DualSubs: 🔣 Universal", "#!name = 🍿️ DualSubs: 🔣 Universal LLM")
-    .replace(/^#!version\s*=\s*(.+)$/m, (_, version) => `#!version = ${version.trim()}.4`)
+    .replace(/^#!version\s*=\s*(.+)$/m, (_, version) => `#!version = ${version.trim()}.5`)
     .replace(/^#!date\s*=.*$/m, "#!date = 2026-07-15 04:00:00")
     .replace(
       /#!desc = .*/,
