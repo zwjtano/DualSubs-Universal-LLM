@@ -2,7 +2,7 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 
 const root = resolve(import.meta.dirname, "..");
-const llmVersion = "1.7.5.10";
+const llmVersion = "1.0.0";
 const translateUrl = `https://raw.githubusercontent.com/zwjtano/DualSubs-Universal-LLM/main/Scripts/DualSubs/Translate.response.bundle.js?v=${llmVersion}`;
 const validateUrl = "https://raw.githubusercontent.com/zwjtano/DualSubs-Universal-LLM/main/Scripts/DualSubs/ValidateModel.js";
 
@@ -39,7 +39,9 @@ async function load(url, fallback) {
 function patchPlugin(source, platform) {
   const upstreamVersion = source.match(/^#!version\s*=\s*(.+)$/m)?.[1]?.trim();
   if (!upstreamVersion) throw new Error(`${platform}: missing upstream version`);
-  const version = `${upstreamVersion}.5`;
+  // The YouTube LLM fork has its own release line. Keep the upstream
+  // platform version only for the other generated plugins.
+  const version = platform === "YouTube" ? "1.0.0" : `${upstreamVersion}.5`;
 
   source = source
     .replace(/^(#!name\s*=\s*.+)$/m, `$1 LLM v${version}`)

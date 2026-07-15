@@ -2,7 +2,7 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 
 const root = resolve(import.meta.dirname, "..");
-const llmVersion = "1.7.5.10";
+const llmVersion = "1.0.0";
 const upstreamPluginUrl =
   "https://github.com/DualSubs/Universal/releases/latest/download/DualSubs.Universal.plugin";
 const localScriptUrl =
@@ -133,6 +133,13 @@ function replaceOnce(source, before, after, label) {
 }
 
 function patchBundle(source) {
+  source = replaceOnce(
+    source,
+    'console.log("Version: 1.7.5")',
+    `console.log("Version: ${llmVersion}")`,
+    "bundle display version",
+  );
+
   const argumentNames = [
     "Types",
     "Languages[0]",
