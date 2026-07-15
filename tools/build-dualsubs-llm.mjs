@@ -128,6 +128,31 @@ function replaceOnce(source, before, after, label) {
 }
 
 function patchBundle(source) {
+  const argumentNames = [
+    "Types",
+    "Languages[0]",
+    "Languages[1]",
+    "Position",
+    "Vendor",
+    "LLMEndpoint",
+    "LLMModel",
+    "LLMAuth",
+    "LLMTemperature",
+    "LLMTimeout",
+    "LLMHeaders",
+    "ShowOnly",
+    "LogLevel",
+  ];
+  const normalizeArguments =
+    `typeof $argument!="undefined"&&Array.isArray($argument)&&` +
+    `($argument=Object.fromEntries($argument.map((e,t)=>[${JSON.stringify(argumentNames)}[t],e]).filter(e=>e[0])));`;
+  source = replaceOnce(
+    source,
+    "(()=>{var e=",
+    `(()=>{${normalizeArguments}var e=`,
+    "Loon 位置参数映射",
+  );
+
   source = replaceOnce(
     source,
     'Translate:{Settings:{Vendor:"Google",',
