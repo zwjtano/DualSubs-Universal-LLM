@@ -1,5 +1,5 @@
-#!name = 🍿️ DualSubs: 🎵 Spotify LLM v1.9.12.5
-#!desc = Spotify 增强及双语歌词\nLLM 翻译版 v1.9.12.5
+#!name = 🍿️ DualSubs: 🎵 Spotify LLM v1.0.4
+#!desc = Spotify 增强及双语歌词\nLLM 翻译版 v1.0.4
 #!openUrl = http://boxjs.com/#/app/DualSubs.Spotify
 #!author = zwjtano[https://github.com/zwjtano]
 #!homepage = https://github.com/zwjtano/DualSubs-Universal-LLM
@@ -7,7 +7,7 @@
 #!tag = 🍿️ DualSubs
 #!system = iOS,iPadOS,macOS
 #!date = 2025-10-25 04:40:57
-#!version = 1.9.12.5
+#!version = 1.0.4
 #!system_version = 15
 
 [Argument]

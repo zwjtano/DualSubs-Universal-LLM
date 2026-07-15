@@ -41,7 +41,9 @@ function patchPlugin(source, platform) {
   if (!upstreamVersion) throw new Error(`${platform}: missing upstream version`);
   // The YouTube LLM fork has its own release line. Keep the upstream
   // platform version only for the other generated plugins.
-  const version = platform === "YouTube" ? llmVersion : `${upstreamVersion}.5`;
+  const version = ["YouTube", "Spotify"].includes(platform)
+    ? llmVersion
+    : `${upstreamVersion}.5`;
 
   source = source
     .replace(/^(#!name\s*=\s*.+)$/m, `$1 LLM v${version}`)

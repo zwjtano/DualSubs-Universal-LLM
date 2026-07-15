@@ -7,7 +7,7 @@ for (const platform of ["YouTube", "Netflix", "Spotify"]) {
     "utf8",
   );
   assert.match(source, new RegExp(`#!name = .*${platform}.* LLM v`));
-  if (platform === "YouTube") {
+  if (["YouTube", "Spotify"].includes(platform)) {
     assert.match(source, /^#!version = 1\.0\.4$/m);
   } else {
     assert.match(source, /^#!version = \d+(?:\.\d+){3}$/m);
@@ -39,6 +39,7 @@ for (const platform of ["YouTube", "Netflix", "Spotify"]) {
   }
   assert.doesNotMatch(source, /\{Languages\[0,\{LLMEndpoint\}/);
   if (platform === "Spotify") {
+    assert.match(source, /^#!name = .*Spotify.* LLM v1\.0\.4$/m);
     assert.ok(source.includes("track\\/\\w+\\?(?!.*format=json)(.*) requires-body=1, timeout=180"));
     assert.doesNotMatch(source, /subtype=Translate.*Translate\.response/);
   }
