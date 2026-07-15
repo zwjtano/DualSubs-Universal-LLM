@@ -1,13 +1,13 @@
-#!name = 🍿️ DualSubs: 🎵 Spotify LLM v1.9.12.1
-#!desc = Spotify 增强及双语歌词\nLLM 翻译版 v1.9.12.1
+#!name = 🍿️ DualSubs: 🎵 Spotify LLM v1.9.12.2
+#!desc = Spotify 增强及双语歌词\nLLM 翻译版 v1.9.12.2
 #!openUrl = http://boxjs.com/#/app/DualSubs.Spotify
-#!author = VirgilClyne[https://github.com/VirgilClyne]
-#!homepage = https://DualSubs.github.io/guide/spotify
+#!author = zwjtano[https://github.com/zwjtano]
+#!homepage = https://github.com/zwjtano/DualSubs-Universal-LLM
 #!icon = https://github.com/DualSubs/Spotify/raw/main/src/assets/icon_rounded.png
 #!tag = 🍿️ DualSubs
 #!system = iOS,iPadOS,macOS
 #!date = 2025-10-25 04:40:57
-#!version = 1.9.12.1
+#!version = 1.9.12.2
 #!system_version = 15
 
 [Argument]
@@ -24,15 +24,15 @@ LrcVendor = select,"NeteaseMusic","QQMusic","NeteaseMusicNodeJS",tag=[歌词] �
 LogLevel = select,"WARN","OFF","ERROR","INFO","DEBUG","ALL",tag=[调试] 日志等级,desc=选择脚本日志的输出等级，低于所选等级的日志将全部输出。
 
 [Script]
-generic script-path=https://raw.githubusercontent.com/zwjtano/DualSubs-Universal-LLM/main/Scripts/DualSubs/ValidateModel.js?v=1.7.5.6,tag=🧪 验证大模型,timeout=60,img-url=checkmark.seal.fill,argument=[{LLMEndpoint},{LLMModel},{LLMAuth},{LLMTimeout},{LLMHeaders}],enable=true
+generic script-path=https://raw.githubusercontent.com/zwjtano/DualSubs-Universal-LLM/main/Scripts/DualSubs/ValidateModel.js?v=1.7.5.7,tag=🧪 验证大模型,timeout=60,img-url=checkmark.seal.fill,argument=[{LLMEndpoint},{LLMModel},{LLMAuth},{LLMTimeout},{LLMHeaders}],enable=true
 
 http-response ^https?:\/\/api\.spotify\.com\/v1\/tracks\? requires-body=1, script-path=https://github.com/DualSubs/Spotify/releases/download/v1.9.12/response.bundle.js, tag=🍿️ DualSubs.Spotify.Tracks.response.json, argument=[{Types},{Languages[0]},{Languages[1]},{Vendor},{LrcVendor},{LogLevel}]
 
 http-request ^https?:\/\/(.+-spclient|spclient\.wg)\.spotify\.com(:443)?\/color-lyrics\/v2\/track\/(.+)\?(.*)format=json requires-body=1, script-path=https://github.com/DualSubs/Spotify/releases/download/v1.9.12/request.bundle.js, tag=🍿️ DualSubs.Spotify.Lyrics.request.json, argument=[{Types},{Languages[0]},{Languages[1]},{Vendor},{LrcVendor},{LogLevel}]
 http-request ^https?:\/\/(.+-spclient|spclient\.wg)\.spotify\.com(:443)?\/color-lyrics\/v2\/track\/\w+\?(.*) requires-body=1, binary-body-mode=1, script-path=https://github.com/DualSubs/Spotify/releases/download/v1.9.12/request.bundle.js, tag=🍿️ DualSubs.Spotify.Lyrics.request.proto, argument=[{Types},{Languages[0]},{Languages[1]},{Vendor},{LrcVendor},{LogLevel}]
 
-http-response ^https?:\/\/(.+-spclient|spclient\.wg)\.spotify\.com(:443)?\/color-lyrics\/v2\/track\/(.+)\?(.*)format=json(.*)subtype=Translate requires-body=1, script-path=https://raw.githubusercontent.com/zwjtano/DualSubs-Universal-LLM/main/Scripts/DualSubs/Translate.response.bundle.js?v=1.7.5.6, tag=🍿️ DualSubs.Spotify.Translate.Lyrics.response.json, argument=[{Types},{Languages[0]},{Languages[1]},{Vendor},{LrcVendor},{LogLevel}]
-http-response ^https?:\/\/(.+-spclient|spclient\.wg)\.spotify\.com(:443)?\/color-lyrics\/v2\/track\/\w+\?(.*)subtype=Translate requires-body=1, binary-body-mode=1, script-path=https://raw.githubusercontent.com/zwjtano/DualSubs-Universal-LLM/main/Scripts/DualSubs/Translate.response.bundle.js?v=1.7.5.6, tag=🍿️ DualSubs.Spotify.Translate.Lyrics.response.proto, argument=[{Types},{Languages[0]},{Languages[1]},{Vendor},{LrcVendor},{LogLevel}]
+http-response ^https?:\/\/(.+-spclient|spclient\.wg)\.spotify\.com(:443)?\/color-lyrics\/v2\/track\/(.+)\?(.*)format=json(.*)subtype=Translate requires-body=1, script-path=https://raw.githubusercontent.com/zwjtano/DualSubs-Universal-LLM/main/Scripts/DualSubs/Translate.response.bundle.js?v=1.7.5.7, tag=🍿️ DualSubs.Spotify.Translate.Lyrics.response.json, argument=[{Types},{Languages[0]},{Languages[1]},{Vendor},{LrcVendor},{LogLevel}]
+http-response ^https?:\/\/(.+-spclient|spclient\.wg)\.spotify\.com(:443)?\/color-lyrics\/v2\/track\/\w+\?(.*)subtype=Translate requires-body=1, binary-body-mode=1, script-path=https://raw.githubusercontent.com/zwjtano/DualSubs-Universal-LLM/main/Scripts/DualSubs/Translate.response.bundle.js?v=1.7.5.7, tag=🍿️ DualSubs.Spotify.Translate.Lyrics.response.proto, argument=[{Types},{Languages[0]},{Languages[1]},{Vendor},{LrcVendor},{LogLevel}]
 
 http-response ^https?:\/\/(.+-spclient|spclient\.wg)\.spotify\.com(:443)?\/color-lyrics\/v2\/track\/(.+)\?(.*)format=json(.*)subtype=External requires-body=1, script-path=https://github.com/DualSubs/Universal/releases/latest/download/External.Lyrics.response.bundle.js, tag=🍿️ DualSubs.Spotify.External.Lyrics.response.json, argument=[{Types},{Languages[0]},{Languages[1]},{Vendor},{LrcVendor},{LogLevel}]
 http-response ^https?:\/\/(.+-spclient|spclient\.wg)\.spotify\.com(:443)?\/color-lyrics\/v2\/track\/\w+\?(.*)subtype=External requires-body=1, binary-body-mode=1, script-path=https://github.com/DualSubs/Universal/releases/latest/download/External.Lyrics.response.bundle.js, tag=🍿️ DualSubs.Spotify.External.Lyrics.response.proto, argument=[{Types},{Languages[0]},{Languages[1]},{Vendor},{LrcVendor},{LogLevel}]

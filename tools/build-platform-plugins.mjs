@@ -2,7 +2,7 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 
 const root = resolve(import.meta.dirname, "..");
-const llmVersion = "1.7.5.6";
+const llmVersion = "1.7.5.7";
 const translateUrl = `https://raw.githubusercontent.com/zwjtano/DualSubs-Universal-LLM/main/Scripts/DualSubs/Translate.response.bundle.js?v=${llmVersion}`;
 const validateUrl = `https://raw.githubusercontent.com/zwjtano/DualSubs-Universal-LLM/main/Scripts/DualSubs/ValidateModel.js?v=${llmVersion}`;
 
@@ -39,11 +39,13 @@ async function load(url, fallback) {
 function patchPlugin(source, platform) {
   const upstreamVersion = source.match(/^#!version\s*=\s*(.+)$/m)?.[1]?.trim();
   if (!upstreamVersion) throw new Error(`${platform}: missing upstream version`);
-  const version = `${upstreamVersion}.1`;
+  const version = `${upstreamVersion}.2`;
 
   source = source
     .replace(/^(#!name\s*=\s*.+)$/m, `$1 LLM v${version}`)
     .replace(/^(#!desc\s*=\s*.+)$/m, `$1\\nLLM 翻译版 v${version}`)
+    .replace(/^#!author\s*=\s*.+$/m, "#!author = zwjtano[https://github.com/zwjtano]")
+    .replace(/^#!homepage\s*=\s*.+$/m, "#!homepage = https://github.com/zwjtano/DualSubs-Universal-LLM")
     .replace(/^#!version\s*=\s*.+$/m, `#!version = ${version}`)
     .replace(
       /^Vendor\s*=\s*select,"Google","Microsoft",(.*)$/m,

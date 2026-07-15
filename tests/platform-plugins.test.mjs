@@ -8,12 +8,14 @@ for (const platform of ["YouTube", "Netflix", "Spotify"]) {
   );
   assert.match(source, new RegExp(`#!name = .*${platform}.* LLM v`));
   assert.match(source, /^#!version = \d+(?:\.\d+){3}$/m);
+  assert.match(source, /^#!author = zwjtano\[https:\/\/github\.com\/zwjtano\]$/m);
+  assert.match(source, /^#!homepage = https:\/\/github\.com\/zwjtano\/DualSubs-Universal-LLM$/m);
   assert.match(source, /Vendor = select,"LLM","Google","Microsoft"/);
   assert.match(source, /LLMEndpoint = input/);
   assert.match(source, /🧪 验证大模型/);
   assert.match(
     source,
-    /DualSubs-Universal-LLM\/main\/Scripts\/DualSubs\/Translate\.response\.bundle\.js\?v=1\.7\.5\.6/,
+    /DualSubs-Universal-LLM\/main\/Scripts\/DualSubs\/Translate\.response\.bundle\.js\?v=1\.7\.5\.7/,
   );
 }
 
